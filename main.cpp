@@ -122,8 +122,8 @@ int main(int argc, char** argv) {
     int maxPathLength = 8;
     int boardRows = 4;
     int boardCols = 4;
-    const string wordListFile = "/home/maxlo/NetBeansProjects/es_words_no_accents_lowercase_sorted_uniqued.txt";
-    const string configFile = "/home/maxlo/NetBeansProjects/config";
+    const string wordListFile = "es_words_no_accents_lowercase_sorted_uniqued.txt";
+    const string configFile = "config";
     
 
     cout << "Start Memory: " << endl;
