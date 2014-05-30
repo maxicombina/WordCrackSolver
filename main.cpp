@@ -12,11 +12,13 @@
 #include <map>
 #include <set>
 #include <unordered_map>
-
+#include <algorithm>
+#include <cassert>
 
 #include "Node.h"
 #include "Board.h"
 #include "BoardManager.h"
+#include "ProcessedWord.h"
 #include "debug.h"
 using namespace std;
 
@@ -111,9 +113,6 @@ void loadConfig(const string& configFile, string& letters, int &minLen, int&maxL
     }
 }
 
-/*
- * 
- */
 int main(int argc, char** argv) {
 
     /* CONFIG */
@@ -125,9 +124,10 @@ int main(int argc, char** argv) {
     const string wordListFile = "es_words_no_accents_lowercase_sorted_uniqued.txt";
     const string configFile = "config";
     
+    clock_t program_start = clock();
 
     cout << "Start Memory: " << endl;
-    cout << "Start Real memory: " << endl;
+    cout << "Start Real memory: "  << endl;
 
     // Load config
     loadConfig(configFile, letters, minPathLength, maxPathLength);
@@ -163,28 +163,50 @@ int main(int argc, char** argv) {
             }
         }
     }
+
+    // Get processed word, which include the word string and its value
+    vector<ProcessedWord> allWords;
+    for (int i = 0; i < allPaths.size(); i++){
+        ProcessedWord pw(allPaths[i]);
+        allWords.push_back(pw);
+    }
+    // Sort them
     
-    //cout << pathsToString(allPaths);
+  
     cout << "Checking words" << endl;
     // Print results
     set<string> alreadyPrintedWords;
+    vector<ProcessedWord> validWords;
     for (int i = 0; i < allPaths.size(); i++){
-        string word = bm.wordFromPath(allPaths[i]);
+        ProcessedWord processedWord (allPaths[i]);
+        string word = processedWord.comparableWord();
         if (    wordList.find(word) != wordList.end() /* word in dictionary*/
             &&  alreadyPrintedWords.find(word) == alreadyPrintedWords.end() /* word NOT in printed words */  )
         {
             alreadyPrintedWords.insert(word);
-            cout << "(" << (1+allPaths[i][0]->row());
-            cout << "," << (1+allPaths[i][0]->col()) << ") " ;
-            cout << word << endl;
+            validWords.push_back(processedWord);
         }
+    }
+
+    cout << "Sorting words" << endl;
+    sort (validWords.begin(), validWords.end(), ProcessedWord::wordCmp);        
+
+    assert( alreadyPrintedWords.size() == validWords.size());
+    cout << "Word list:" << endl;
+    for (int i = 0; i < validWords.size(); i++) {
+        cout << "(" << (1 + (int)validWords[i].coordOfNodeInPos(0).first);
+        cout << ", " << (1 + (int)validWords[i].coordOfNodeInPos(0).second) << ") ";
+        cout << validWords[i].prettyWord() << " : " << validWords[i].value() << endl;
     }
 
     cout << "Done!" << endl;
     cout << "Total results: " << allPaths.size() << endl;
     cout << "Total valid words: " << alreadyPrintedWords.size() << endl;
     
-    // Free stuff.
+    // Free stuff. 
+    /**
+     * @todo correctly free.
+     */
 //    for (int i = 0; i < paths.size(); i++) {
 //        for (int j = 0; j < paths[i].size(); j++ ){
 //            delete paths[i][j];
@@ -192,7 +214,8 @@ int main(int argc, char** argv) {
 //    }
     delete b;
     
-    
+    clock_t program_end = clock() - program_start;
+    cout << "Time spent: " << ((float)program_end/CLOCKS_PER_SEC) << " secs" << endl;
     return 0;
 }
 

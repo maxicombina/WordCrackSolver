@@ -8,12 +8,17 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <map>
+#include <utility>
 
 #include "BoardManager.h"
 #include "Node.h"
+#include "ProcessedWord.h"
 #include "debug.h"
 
 BoardManager::BoardManager() {
+
+
 }
 
 BoardManager::~BoardManager() {
@@ -73,15 +78,20 @@ std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t
     return paths;
 }
 
-std::string BoardManager::wordFromPath(std::vector<Node* > path)
+std::pair<std::string, int> BoardManager::wordFromPath(std::vector<Node* > path)
 {
-    std::stringstream s("");
-    for (int i = 0; i < path.size(); i++){
-        if (path[i]->letter() == _QU){
-            s << "qu";
-        } else {
-            s << path[i]->letter();
-        }
-    }
-    return s.str();
+//    std::stringstream s("");
+//    int value = 0;
+//    for (int i = 0; i < path.size(); i++){
+//        value += _letterValues[path[i]->letter()];
+//        if (path[i]->letter() == 'q'){
+//            s << "qu";
+//        } else {
+//            s << path[i]->letter();
+//        }
+//    }
+//    return std::pair<std::string, int>(s.str(), value);
 }
+
+
+ 

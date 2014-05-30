@@ -15,15 +15,21 @@
 extern "C" {
 #endif
 
-// Will use "@" for "qu"
-#define _QU '@'
-
+   
+    enum ScoreMods {
+        NONE,
+        DOUBLE_LETTER,
+        DOUBLE_WORD,
+        TRIPLE_LETTER,
+        TRIPLE_WORD};
+            
     class Node {
         private:
             bool _visited;
             char _letter;
             uint8_t _row;
             uint8_t _col;
+            ScoreMods _mod;
             
         public:
             // Constructors, destructor

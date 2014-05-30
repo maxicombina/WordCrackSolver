@@ -10,7 +10,10 @@
 
 #include <vector>
 #include <stdint.h>
+#include <map>
+#include <utility>
 
+#include "ProcessedWord.h"
 #include "Node.h"
 #include "Board.h"
 
@@ -21,7 +24,7 @@ public:
 public:
     std::vector<Node* > getAvailableNeighbors(uint8_t row, uint8_t col, const Board &board);
     std::vector<std::vector<Node*> > getPathsFrom(uint8_t row, uint8_t col, int length, const Board &board);
-    std::string wordFromPath(std::vector<Node* > path);
+    std::pair<std::string, int> wordFromPath(std::vector<Node* > path);
 };
 
 #endif	/* BOARDMANAGER_H */

@@ -109,8 +109,10 @@ std::string Board::toString()
         for (int c = 0; c < _board[r].size(); c++) {
             s << "  [";
             std::string letter = "_";
-            if (_board[r][c]->letter() == _QU) {
+            if (_board[r][c]->letter() == 'q') {
                 letter = "QU";
+            } else if (_board[r][c]->letter() == '#') {
+                letter = "Ñ";
             } else {
                 letter = toupper(_board[r][c]->letter());
             }

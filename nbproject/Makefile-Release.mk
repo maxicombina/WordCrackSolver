@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Board.o \
 	${OBJECTDIR}/BoardManager.o \
 	${OBJECTDIR}/Node.o \
+	${OBJECTDIR}/ProcessedWord.o \
 	${OBJECTDIR}/main.o
 
 
@@ -79,6 +80,11 @@ ${OBJECTDIR}/Node.o: Node.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Node.o Node.cpp
+
+${OBJECTDIR}/ProcessedWord.o: ProcessedWord.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ProcessedWord.o ProcessedWord.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
