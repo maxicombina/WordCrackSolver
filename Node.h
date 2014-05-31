@@ -21,7 +21,8 @@ extern "C" {
         DOUBLE_LETTER,
         DOUBLE_WORD,
         TRIPLE_LETTER,
-        TRIPLE_WORD};
+        TRIPLE_WORD
+    };
             
     class Node {
         private:

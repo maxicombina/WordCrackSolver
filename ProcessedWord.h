@@ -29,11 +29,13 @@ public:
         
 private:
     void setupLetterValues(void);
+    void setupLengthExtraPoints(void);
     std::string _comparable_word;
     std::string _pretty_word;
     int _value;
     std::vector<Node *> _path;
-    std::map<char, int> _letterValues;        
+    std::map<char, int> _letterValues;
+    std::map<int, int> _lenExtraPoints;
 };
 
 #endif	/* PROCESSEDWORD_H */

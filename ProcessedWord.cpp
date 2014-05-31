@@ -42,9 +42,29 @@ void ProcessedWord::setupLetterValues(void)
     _letterValues.insert(std::pair<char, int>('y', 4));
     _letterValues.insert(std::pair<char, int>('z', 10));
 }
+
+void ProcessedWord::setupLengthExtraPoints(void)
+{
+    // Don't know the price for longer words
+    _lenExtraPoints.insert(std::pair<int, int>(10, 30));
+    _lenExtraPoints.insert(std::pair<int, int>(9, 25));
+    _lenExtraPoints.insert(std::pair<int, int>(8, 18));
+    _lenExtraPoints.insert(std::pair<int, int>(7, 12));
+    _lenExtraPoints.insert(std::pair<int, int>(6, 8));
+    _lenExtraPoints.insert(std::pair<int, int>(5, 4));
+    _lenExtraPoints.insert(std::pair<int, int>(4, 2));
+    // Really no need for this `0' values
+    _lenExtraPoints.insert(std::pair<int, int>(3, 0));
+    _lenExtraPoints.insert(std::pair<int, int>(2, 0));
+    _lenExtraPoints.insert(std::pair<int, int>(1, 0));
+    _lenExtraPoints.insert(std::pair<int, int>(0, 0));
+}
 ProcessedWord::ProcessedWord(std::vector<Node*> path) {
     this->setupLetterValues();
+    this->setupLengthExtraPoints();
     
+    int i = _lenExtraPoints[-1];
+   
     _path = path;
 
     // Init internal word and value
@@ -66,9 +86,10 @@ ProcessedWord::ProcessedWord(std::vector<Node*> path) {
         }
     }
 
+    // @TODO: consider multiplicators.
     _comparable_word = comparable.str();
     _pretty_word = pretty.str();
-    _value = value;
+    _value = value + _lenExtraPoints[_comparable_word.length()];
 }
 
 //ProcessedWord::ProcessedWord(const ProcessedWord& orig) {
