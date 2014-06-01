@@ -179,6 +179,10 @@ bool loadConfig(const string& configFile,
     return true;
 }
 
+bool checkWord()
+{
+}
+
 int main(int argc, char** argv) {
 
     /* CONFIG */
@@ -217,72 +221,75 @@ int main(int argc, char** argv) {
     b->setMods(TRIPLE_LETTER, tripleLetter);
     b->setMods(DOUBLE_WORD, doubleWord);
     b->setMods(TRIPLE_WORD, tripleWord);
-    
-    cout << "Using board: " << endl;
-    cout << endl << b->toString() << endl;
-    
+  
     // And the board manager
     BoardManager bm;
+
+    cout << "Using board: " << endl;
+    cout << endl << b->toString() << endl;
 
     // Load dictionary
     cout << "Loading word list" << endl;
     unordered_map<string, int> wordList = loadDictionary(wordListFile);
 
-    vector<vector<Node*> > allPaths;
-    cout << "Creating possible paths:" << endl;
+    cout << "Creating possible paths and checking words:" << endl;
+    
+    // Valid words already detected. Avoids printing duplicate words from different paths
+    set<string> alreadyDetectedWords;
+    // Valid words
+    vector<ProcessedWord> validWords;
+    // Only for stats
+    int totalPaths = 0;
     for (int len = minPathLength; len <= maxPathLength; len++ ) {
         cout << "\tProcessing path length " << len << endl;
         for (int r = 0; r < BOARD_ROWS; r++) {
             for (int c = 0; c < BOARD_COLS; c++ ) {
                 Board cloneBoard = *b;
-                vector<vector<Node*> > p = bm.getPathsFrom(r, c, len, cloneBoard);
-                allPaths.insert(allPaths.begin(), p.begin(), p.end());
+                // All possible paths from pos (`r`, `c`) of length `len`
+                vector<vector<Node*> > paths = bm.getPathsFrom(r, c, len, cloneBoard);
+                
+                totalPaths += paths.size();
+                
+                // Verify all the paths and keep only the valid words
+                for (int i = 0; i < paths.size(); i++) {
+                    // Get current word
+                    ProcessedWord processedWord(paths[i]);
+                    string word = processedWord.comparableWord();
+                    
+                    if (   wordList.find(word) != wordList.end() /* Valid ... */
+                        && alreadyDetectedWords.find (word) == alreadyDetectedWords.end()) /* ... but not already stored */
+                    {
+                        alreadyDetectedWords.insert(word);
+                        validWords.push_back(processedWord);
+                    } else {
+                        // This path is not a valid word. Free it from memory
+                        for (int j = 0; j < paths[i].size(); j++ ){
+                            delete paths[i][j];
+                        }
+                    }
+                }
             }
-        }
-    }
-
-    // Get processed word, which include the word string and its value
-    vector<ProcessedWord> allWords;
-    for (int i = 0; i < allPaths.size(); i++){
-        ProcessedWord pw(allPaths[i]);
-        allWords.push_back(pw);
-    }
-    // Sort them
-    
-  
-    cout << "Checking words" << endl;
-    // Print results
-    set<string> alreadyPrintedWords;
-    vector<ProcessedWord> validWords;
-    for (int i = 0; i < allPaths.size(); i++){
-        ProcessedWord processedWord (allPaths[i]);
-        string word = processedWord.comparableWord();
-        if (    wordList.find(word) != wordList.end() /* word in dictionary*/
-            &&  alreadyPrintedWords.find(word) == alreadyPrintedWords.end() /* word NOT in printed words */  )
-        {
-            alreadyPrintedWords.insert(word);
-            validWords.push_back(processedWord);
         }
     }
 
     cout << "Sorting words" << endl;
     sort (validWords.begin(), validWords.end(), ProcessedWord::wordCmp);        
 
-    assert( alreadyPrintedWords.size() == validWords.size());
-    cout << "Word list:" << endl;
+    assert( alreadyDetectedWords.size() == validWords.size());
+    cout << "\nWord list:" << endl;
     for (int i = 0; i < validWords.size(); i++) {
         cout << "(" << (1 + (int)validWords[i].coordOfNodeInPos(0).first);
         cout << ", " << (1 + (int)validWords[i].coordOfNodeInPos(0).second) << ") ";
         cout << validWords[i].prettyWord() << " : " << validWords[i].value() << endl;
     }
 
-    cout << "Done!" << endl;
-    cout << "Total results: " << allPaths.size() << endl;
-    cout << "Total valid words: " << alreadyPrintedWords.size() << endl;
+    cout << "\nDone!" << endl;
+    cout << "Total results: " << totalPaths << endl;
+    cout << "Total valid words: " << alreadyDetectedWords.size() << endl;
     
     // Free stuff. 
     /**
-     * @todo correctly free.
+     * @todo correctly free validWords
      */
 //    for (int i = 0; i < paths.size(); i++) {
 //        for (int j = 0; j < paths[i].size(); j++ ){
