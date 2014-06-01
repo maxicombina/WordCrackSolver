@@ -26,7 +26,8 @@ public:
     int value();    
     std::pair<uint8_t, uint8_t> coordOfNodeInPos(uint8_t);
     static bool wordCmp(ProcessedWord, ProcessedWord);
-        
+    void deleteWord(); // Yes, ugly to put a deletor here. 
+    
 private:
     void setupLetterValues(void);
     void setupLengthExtraPoints(void);

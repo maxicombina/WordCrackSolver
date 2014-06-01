@@ -13,7 +13,7 @@
 #include "Board.h"
 #include "Node.h"
 
-Board::Board(uint8_t rows, uint8_t cols)
+void Board::init(uint8_t rows, uint8_t cols)
 {
     _rows = rows;
     _cols = cols;
@@ -31,8 +31,18 @@ Board::Board(uint8_t rows, uint8_t cols)
             _board[r][c] = new Node('_', r, r, NONE);
         }
     }
+
 }
 
+Board::Board(uint8_t rows, uint8_t cols)
+{
+    this->init(rows, cols);
+
+}
+Board::Board()
+{
+    this->init(DEFAULT_BOARD_ROWS, DEFAULT_BOARD_COLS);
+}
 
 Board::Board(const Board& orig) {
     DEBUG_MSG("Board CC");

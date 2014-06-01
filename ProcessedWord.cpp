@@ -152,3 +152,10 @@ std::pair<uint8_t, uint8_t> ProcessedWord::coordOfNodeInPos(uint8_t pos)
      return firstWord.value() > secondWord.value();
  }
  
+ void ProcessedWord::deleteWord(void)
+ {
+     for (int i = 0; i < _path.size(); i++) {
+         delete _path[i];
+     }
+ }
+ 

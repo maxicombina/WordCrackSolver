@@ -23,10 +23,6 @@
 #include "debug.h"
 using namespace std;
 
-// Board Size
-#define BOARD_ROWS 4
-#define BOARD_COLS 4
-
 
 std::string ngbsToString(std::vector<Node*> v)
 {
@@ -75,13 +71,14 @@ unordered_map<string, int> loadDictionary(const string& wordListFile)
         myfile.close();
     } else {
         cerr << "error opening " << wordListFile << endl;
+        exit(EXIT_FAILURE);
     }
     
     return dictionary;
 
 }
 
-vector<pair<uint8_t, uint8_t>> parseCoordinateList(const string& list)
+vector<pair<uint8_t, uint8_t>> parseCoordinateList(const string& list, uint8_t rowNum, uint8_t colNum)
 {
     vector<pair<uint8_t, uint8_t>> v;
     istringstream isList(list);
@@ -95,9 +92,9 @@ vector<pair<uint8_t, uint8_t>> parseCoordinateList(const string& list)
         uint8_t row = (uint8_t) coordPair.c_str()[0] - '0';
         uint8_t col = (uint8_t) coordPair.c_str()[1] - '0';
         if (   row >= 0
-            && row <= BOARD_ROWS
+            && row <= rowNum
             && col >= 0
-            && col <= BOARD_COLS
+            && col <= colNum
             )
         {
             v.push_back(pair<int, int>(row, col));
@@ -107,7 +104,7 @@ vector<pair<uint8_t, uint8_t>> parseCoordinateList(const string& list)
     return v;
 }
 
-bool loadConfig(const string& configFile,
+bool loadConfig(const string& configFile, uint8_t rowNum, uint8_t colNum,
                 string& letters,
                 int& minLen,
                 int& maxLen,
@@ -156,16 +153,16 @@ bool loadConfig(const string& configFile,
                     } else if (strcasecmp(key.c_str(), "dl") == 0) {
                         // No trimming here, done inside parseCoordinateList
                         // Double letter
-                        doubleLetter = parseCoordinateList(value);
+                        doubleLetter = parseCoordinateList(value, rowNum, colNum);
                     } else if (strcasecmp(key.c_str(), "tl") == 0) {
                         // Triple letter
-                        tripleLetter = parseCoordinateList(value);
+                        tripleLetter = parseCoordinateList(value, rowNum, colNum);
                     } else if (strcasecmp(key.c_str(), "dw") == 0) {
                         // Double word
-                        doubleWord = parseCoordinateList(value);
+                        doubleWord = parseCoordinateList(value, rowNum, colNum);
                     } else if (strcasecmp(key.c_str(), "tw") == 0) {
                         // Triple word
-                        tripleWord = parseCoordinateList(value);
+                        tripleWord = parseCoordinateList(value, rowNum, colNum);
                     }
                     
                 }
@@ -179,13 +176,9 @@ bool loadConfig(const string& configFile,
     return true;
 }
 
-bool checkWord()
-{
-}
-
 int main(int argc, char** argv) {
 
-    /* CONFIG */
+    /* Default CONFIG */
     string letters = "________________";
     int minPathLength = 1;
     int maxPathLength = 5;
@@ -194,7 +187,7 @@ int main(int argc, char** argv) {
     vector<pair<uint8_t, uint8_t>> doubleWord;
     vector<pair<uint8_t, uint8_t>> tripleWord;
     
-    const string wordListFile = "es_words_no_accents_lowercase_sorted_uniqued.txt";
+    const string wordListFile = "dict.txt";
     const string configFile = "config";
     
     clock_t program_start = clock();
@@ -203,7 +196,7 @@ int main(int argc, char** argv) {
     cout << "Start Real memory: "  << endl;
 
     // Load config
-    if (!loadConfig(configFile, letters, minPathLength, maxPathLength,
+    if (!loadConfig(configFile, DEFAULT_BOARD_ROWS, DEFAULT_BOARD_ROWS, letters, minPathLength, maxPathLength,
                     doubleLetter, tripleLetter, doubleWord, tripleWord)) {
         cout << "Failure loading config, using defaults" << endl;
     }
@@ -211,22 +204,22 @@ int main(int argc, char** argv) {
     cout << "Max path: " << maxPathLength << endl;
     
     // Build board
-    if (BOARD_ROWS * BOARD_COLS != letters.size()) {
-        cerr << "I need " << BOARD_ROWS * BOARD_COLS << " letters, " << letters.size() << " provided" << endl;
+    if (DEFAULT_BOARD_ROWS * DEFAULT_BOARD_COLS != letters.size()) {
+        cerr << "I need " << DEFAULT_BOARD_ROWS * DEFAULT_BOARD_ROWS << " letters, " << letters.size() << " provided" << endl;
         exit(EXIT_FAILURE);
     }
-    Board *b =  new Board(BOARD_ROWS, BOARD_COLS);
-    b->setLetters(letters);
-    b->setMods(DOUBLE_LETTER, doubleLetter);
-    b->setMods(TRIPLE_LETTER, tripleLetter);
-    b->setMods(DOUBLE_WORD, doubleWord);
-    b->setMods(TRIPLE_WORD, tripleWord);
+    Board board(DEFAULT_BOARD_ROWS, DEFAULT_BOARD_COLS);
+    board.setLetters(letters);
+    board.setMods(DOUBLE_LETTER, doubleLetter);
+    board.setMods(TRIPLE_LETTER, tripleLetter);
+    board.setMods(DOUBLE_WORD, doubleWord);
+    board.setMods(TRIPLE_WORD, tripleWord);
   
     // And the board manager
     BoardManager bm;
 
     cout << "Using board: " << endl;
-    cout << endl << b->toString() << endl;
+    cout << endl << board.toString() << endl;
 
     // Load dictionary
     cout << "Loading word list" << endl;
@@ -242,9 +235,9 @@ int main(int argc, char** argv) {
     int totalPaths = 0;
     for (int len = minPathLength; len <= maxPathLength; len++ ) {
         cout << "\tProcessing path length " << len << endl;
-        for (int r = 0; r < BOARD_ROWS; r++) {
-            for (int c = 0; c < BOARD_COLS; c++ ) {
-                Board cloneBoard = *b;
+        for (int r = 0; r < board.getRows(); r++) {
+            for (int c = 0; c < board.getCols(); c++ ) {
+                Board cloneBoard = board;
                 // All possible paths from pos (`r`, `c`) of length `len`
                 vector<vector<Node*> > paths = bm.getPathsFrom(r, c, len, cloneBoard);
                 
@@ -288,15 +281,13 @@ int main(int argc, char** argv) {
     cout << "Total valid words: " << alreadyDetectedWords.size() << endl;
     
     // Free stuff. 
-    /**
-     * @todo correctly free validWords
-     */
-//    for (int i = 0; i < paths.size(); i++) {
-//        for (int j = 0; j < paths[i].size(); j++ ){
-//            delete paths[i][j];
-//        }
-//    }
-    delete b;
+    // Free validWords
+    for (int i = 0; i < validWords.size(); i++) {
+            validWords[i].deleteWord();
+ 
+    }
+    // And free the board
+    //delete board;
     
     clock_t program_end = clock() - program_start;
     cout << "Time spent: " << ((float)program_end/CLOCKS_PER_SEC) << " secs" << endl;

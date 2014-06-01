@@ -15,9 +15,14 @@
 
 #include "Node.h"
 
+// Board Size
+#define DEFAULT_BOARD_ROWS 4
+#define DEFAULT_BOARD_COLS 4
+
 class Board {
 public:
     Board(uint8_t rows, uint8_t cols);
+    Board();
     Board(const Board& orig);
     virtual ~Board();
     
@@ -33,6 +38,7 @@ private:
     uint8_t _rows;
     uint8_t _cols;
     std::vector< std::vector<Node*> > _board;
+    void init(uint8_t rows, uint8_t cols);
 };
 
 #endif	/* BOARD_H */
