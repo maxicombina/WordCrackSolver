@@ -23,7 +23,7 @@ void ProcessedWord::setupLetterValues(void)
     _letterValues.insert(std::pair<char, int>('g', 2));
     _letterValues.insert(std::pair<char, int>('h', 4));
     _letterValues.insert(std::pair<char, int>('i', 1));
-    _letterValues.insert(std::pair<char, int>('j', 1)); // @todo: recheck
+    _letterValues.insert(std::pair<char, int>('j', 8));
     _letterValues.insert(std::pair<char, int>('k', 1)); // MISSING?
     _letterValues.insert(std::pair<char, int>('l', 1));
     _letterValues.insert(std::pair<char, int>('m', 3));
