@@ -45,7 +45,7 @@ void ProcessedWord::setupLetterValues(void)
 
 void ProcessedWord::setupLengthExtraPoints(void)
 {
-    // Don't know the price for longer words
+    // Don't know the extra points for longer words
     _lenExtraPoints.insert(std::pair<int, int>(10, 30));
     _lenExtraPoints.insert(std::pair<int, int>(9, 25));
     _lenExtraPoints.insert(std::pair<int, int>(8, 18));
@@ -60,19 +60,38 @@ void ProcessedWord::setupLengthExtraPoints(void)
     _lenExtraPoints.insert(std::pair<int, int>(0, 0));
 }
 ProcessedWord::ProcessedWord(std::vector<Node*> path) {
+    // Initial setup
     this->setupLetterValues();
     this->setupLengthExtraPoints();
     
-    int i = _lenExtraPoints[-1];
-   
+    // Store the path for later processing
     _path = path;
 
+    // Word modifiers
+    std::vector<ScoreMods> wordMods;
+    
     // Init internal word and value
     std::stringstream comparable("");
     std::stringstream pretty("");
-    int value = 0;
+    int wordValue = 0;
+    
     for (int i = 0; i < path.size(); i++){
-        value += _letterValues[path[i]->letter()];
+        ScoreMods nodeMod = path[i]->getMod();
+        if (nodeMod == DOUBLE_WORD || nodeMod == TRIPLE_WORD) {
+            // Store word modifiers, will use later to calculate value
+            wordMods.push_back(nodeMod);
+        }
+
+        // Process letter modifier
+        int nodeValue = _letterValues[path[i]->letter()];
+        if (nodeMod == DOUBLE_LETTER) {
+            nodeValue = nodeValue * 2;
+        } else if (nodeMod == TRIPLE_LETTER) {
+            nodeValue = nodeValue * 3;
+        }
+       
+        wordValue += nodeValue;
+        
         if (path[i]->letter() == 'q'){
             comparable << "qu";
             pretty << "qu";
@@ -86,10 +105,19 @@ ProcessedWord::ProcessedWord(std::vector<Node*> path) {
         }
     }
 
-    // @TODO: consider multiplicators.
     _comparable_word = comparable.str();
     _pretty_word = pretty.str();
-    _value = value + _lenExtraPoints[_comparable_word.length()];
+    
+    // Process word modifiers
+    for (int i = 0; i < wordMods.size(); i++) {
+        if (wordMods[i] == DOUBLE_WORD) {
+            wordValue = wordValue * 2;
+        } else if (wordMods[i] == TRIPLE_WORD) {
+            wordValue = wordValue * 3;
+        }
+    }
+    // Extra points due to word length
+    _value = wordValue + _lenExtraPoints[_comparable_word.length()];
 }
 
 //ProcessedWord::ProcessedWord(const ProcessedWord& orig) {

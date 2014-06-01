@@ -53,9 +53,9 @@ std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t
         std::vector<Node*> ngbs = this->getAvailableNeighbors(row, col, board);
         for (int i = 0; i < ngbs.size(); i++) {
             std::vector<Node*> path;
-            Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col());
+            Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col(), currentNode->getMod());
             path.push_back(currentNodeCopy);
-            Node* currentNgbCopy = new Node(ngbs[i]->letter(), ngbs[i]->row(), ngbs[i]->col());
+            Node* currentNgbCopy = new Node(ngbs[i]->letter(), ngbs[i]->row(), ngbs[i]->col(), ngbs[i]->getMod());
             path.push_back(currentNgbCopy);
             paths.push_back(path);
         }
@@ -69,7 +69,7 @@ std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t
             for (int j = 0; j < subPaths.size(); j++) {
                 std::vector<Node *> currentPath = subPaths[j];
                 std::vector<Node*>::iterator it = currentPath.begin();
-                Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col());
+                Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col(), currentNode->getMod());
                 currentPath.insert(it, currentNodeCopy);
                 paths.push_back(currentPath);
             }

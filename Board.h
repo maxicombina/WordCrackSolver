@@ -26,6 +26,7 @@ public:
     Node* getNode(uint8_t row, uint8_t col) const;
     void setNode(uint8_t row, uint8_t col, Node& node);
     void setLetters(std::string letters);
+    void setMods(ScoreMods, std::vector<std::pair<uint8_t, uint8_t> > );
     std::string toString();
     
 private:

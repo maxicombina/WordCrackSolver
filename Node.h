@@ -19,8 +19,8 @@ extern "C" {
     enum ScoreMods {
         NONE,
         DOUBLE_LETTER,
-        DOUBLE_WORD,
         TRIPLE_LETTER,
+        DOUBLE_WORD,
         TRIPLE_WORD
     };
             
@@ -34,11 +34,13 @@ extern "C" {
             
         public:
             // Constructors, destructor
-            Node (char letter, uint8_t row, uint8_t col);
+            Node(char letter, uint8_t row, uint8_t col, ScoreMods mod);
             ~Node();
             
             // Methods
             void set(char letter, uint8_t row, uint8_t col);
+            void setMod(ScoreMods mod);
+            ScoreMods getMod(void);
             void markVisited();
             bool isVisited() const;
             void clearVisited();
@@ -46,6 +48,7 @@ extern "C" {
             uint8_t row() const;
             uint8_t col() const;
             std::string toString();
+            static std::string scoreModToString(ScoreMods mod);
         
     };
 

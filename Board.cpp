@@ -28,7 +28,7 @@ Board::Board(uint8_t rows, uint8_t cols)
 
     for (int r = 0; r <  _board.size(); r++) {
         for (int c = 0; c < _board[r].size(); c++) {
-            _board[r][c] = new Node('_', r, r);
+            _board[r][c] = new Node('_', r, r, NONE);
         }
     }
 }
@@ -46,7 +46,7 @@ Board::Board(const Board& orig) {
     
     for (int r = 0; r <  _board.size(); r++) {
         for (int c = 0; c < _board[r].size(); c++) {
-            _board[r][c] = new Node(orig._board[r][c]->letter(), orig._board[r][c]->row(), orig._board[r][c]->col());
+            _board[r][c] = new Node(orig._board[r][c]->letter(), orig._board[r][c]->row(), orig._board[r][c]->col(), orig._board[r][c]->getMod());
             if (orig._board[r][c]->isVisited()) {
                 _board[r][c]->markVisited();
             }
@@ -102,6 +102,14 @@ void Board::setLetters(std::string letters) {
     }
 }
 
+void Board::setMods(ScoreMods mod, std::vector<std::pair<uint8_t, uint8_t> > coords)
+{
+    for (int i = 0; i < coords.size(); i++) {
+        // The "-1" is because the coordinateds in the config file start from 1
+        _board[coords[i].first-1][coords[i].second-1]->setMod(mod);
+    }
+}
+
 std::string Board::toString()
 {
     std::stringstream s("");
@@ -117,11 +125,8 @@ std::string Board::toString()
                 letter = toupper(_board[r][c]->letter());
             }
             s << letter;
+            s << Node::Node::scoreModToString(_board[r][c]->getMod());
             s << "]";
-            //std::cout << r << ", " << c << ": " << _board[r][c] << std::endl;
-//            if (_board[r][c]) {
-//                delete _board[r][c];
-//            }
         }
         s << "\n\n";
     }

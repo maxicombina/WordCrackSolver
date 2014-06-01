@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <cassert>
+#include <strings.h>
 
 #include "Node.h"
 #include "Board.h"
@@ -21,6 +22,11 @@
 #include "ProcessedWord.h"
 #include "debug.h"
 using namespace std;
+
+// Board Size
+#define BOARD_ROWS 4
+#define BOARD_COLS 4
+
 
 std::string ngbsToString(std::vector<Node*> v)
 {
@@ -75,8 +81,46 @@ unordered_map<string, int> loadDictionary(const string& wordListFile)
 
 }
 
-void loadConfig(const string& configFile, string& letters, int &minLen, int&maxLen)
+vector<pair<uint8_t, uint8_t>> parseCoordinateList(const string& list)
 {
+    vector<pair<uint8_t, uint8_t>> v;
+    istringstream isList(list);
+    string coordPair;
+    while(getline(isList, coordPair, ',')) {
+        stringstream trimmer;
+        // Trim coordinate pair
+        trimmer.str(coordPair);
+        trimmer >> coordPair;
+        
+        uint8_t row = (uint8_t) coordPair.c_str()[0] - '0';
+        uint8_t col = (uint8_t) coordPair.c_str()[1] - '0';
+        if (   row >= 0
+            && row <= BOARD_ROWS
+            && col >= 0
+            && col <= BOARD_COLS
+            )
+        {
+            v.push_back(pair<int, int>(row, col));
+        }
+    }
+            
+    return v;
+}
+
+bool loadConfig(const string& configFile,
+                string& letters,
+                int& minLen,
+                int& maxLen,
+                vector<pair<uint8_t, uint8_t>>& doubleLetter,
+                vector<pair<uint8_t, uint8_t>>& tripleLetter,        
+                vector<pair<uint8_t, uint8_t>>& doubleWord,
+                vector<pair<uint8_t, uint8_t>>& tripleWord)
+{
+    doubleLetter.clear();
+    tripleLetter.clear();
+    doubleWord.clear();
+    tripleWord.clear();
+
     ifstream myFile(configFile);
     if (myFile.is_open()) {
         string line;
@@ -94,33 +138,58 @@ void loadConfig(const string& configFile, string& letters, int &minLen, int&maxL
                     continue; // Skip comments
                 }
                 if( std::getline(is_line, value) ) {
-                    // Trim the value
-                    trimmer.str(value);
-                    trimmer >> value;
-
                     if (key == "letters") {
+                        // Trim the value
+                        trimmer.str(value);
+                        trimmer >> value;
                         letters = value;
                     } else if (key == "minLen") {
+                        // Trim the value
+                        trimmer.str(value);
+                        trimmer >> value;
                         minLen = atoi(value.c_str());
                     } else if (key == "maxLen") {
+                        // Trim the value
+                        trimmer.str(value);
+                        trimmer >> value;
                         maxLen = atoi(value.c_str());
-                    } 
+                    } else if (strcasecmp(key.c_str(), "dl") == 0) {
+                        // No trimming here, done inside parseCoordinateList
+                        // Double letter
+                        doubleLetter = parseCoordinateList(value);
+                    } else if (strcasecmp(key.c_str(), "tl") == 0) {
+                        // Triple letter
+                        tripleLetter = parseCoordinateList(value);
+                    } else if (strcasecmp(key.c_str(), "dw") == 0) {
+                        // Double word
+                        doubleWord = parseCoordinateList(value);
+                    } else if (strcasecmp(key.c_str(), "tw") == 0) {
+                        // Triple word
+                        tripleWord = parseCoordinateList(value);
+                    }
+                    
                 }
             }
         }
     } else {
-        cerr << "error opening " << configFile << endl;
+        cerr << "Error opening " << configFile << endl;
+        return false;
     }
+    
+    return true;
 }
 
 int main(int argc, char** argv) {
 
     /* CONFIG */
     string letters = "________________";
-    int minPathLength = 3;
-    int maxPathLength = 8;
-    int boardRows = 4;
-    int boardCols = 4;
+    int minPathLength = 1;
+    int maxPathLength = 5;
+    vector<pair<uint8_t, uint8_t>> doubleLetter;
+    vector<pair<uint8_t, uint8_t>> tripleLetter;
+    vector<pair<uint8_t, uint8_t>> doubleWord;
+    vector<pair<uint8_t, uint8_t>> tripleWord;
+    
     const string wordListFile = "es_words_no_accents_lowercase_sorted_uniqued.txt";
     const string configFile = "config";
     
@@ -130,17 +199,25 @@ int main(int argc, char** argv) {
     cout << "Start Real memory: "  << endl;
 
     // Load config
-    loadConfig(configFile, letters, minPathLength, maxPathLength);
+    if (!loadConfig(configFile, letters, minPathLength, maxPathLength,
+                    doubleLetter, tripleLetter, doubleWord, tripleWord)) {
+        cout << "Failure loading config, using defaults" << endl;
+    }
     cout << "Min path: " << minPathLength << endl;
     cout << "Max path: " << maxPathLength << endl;
     
     // Build board
-    if (boardRows * boardCols != letters.size()) {
-        cerr << "I need " << boardRows * boardCols << " letters, " << letters.size() << " provided" << endl;
+    if (BOARD_ROWS * BOARD_COLS != letters.size()) {
+        cerr << "I need " << BOARD_ROWS * BOARD_COLS << " letters, " << letters.size() << " provided" << endl;
         exit(EXIT_FAILURE);
     }
-    Board *b =  new Board(boardRows, boardCols);
+    Board *b =  new Board(BOARD_ROWS, BOARD_COLS);
     b->setLetters(letters);
+    b->setMods(DOUBLE_LETTER, doubleLetter);
+    b->setMods(TRIPLE_LETTER, tripleLetter);
+    b->setMods(DOUBLE_WORD, doubleWord);
+    b->setMods(TRIPLE_WORD, tripleWord);
+    
     cout << "Using board: " << endl;
     cout << endl << b->toString() << endl;
     
@@ -155,8 +232,8 @@ int main(int argc, char** argv) {
     cout << "Creating possible paths:" << endl;
     for (int len = minPathLength; len <= maxPathLength; len++ ) {
         cout << "\tProcessing path length " << len << endl;
-        for (int r = 0; r < boardRows; r++) {
-            for (int c = 0; c < boardCols; c++ ) {
+        for (int r = 0; r < BOARD_ROWS; r++) {
+            for (int c = 0; c < BOARD_COLS; c++ ) {
                 Board cloneBoard = *b;
                 vector<vector<Node*> > p = bm.getPathsFrom(r, c, len, cloneBoard);
                 allPaths.insert(allPaths.begin(), p.begin(), p.end());
