@@ -191,6 +191,7 @@ void computeValidWords( /* In */
     // Only for stats
     int totalPathsTmp = 0;
 
+    clock_t compute_start = clock();
     for (int r = 0; r < board.getRows(); r++) {
         for (int c = 0; c < board.getCols(); c++ ) {
             Board cloneBoard = board;
@@ -220,6 +221,13 @@ void computeValidWords( /* In */
         }
     }
 
+    clock_t compute_end = clock();
+    float compute_time = (float)(compute_end-compute_start)/CLOCKS_PER_SEC;
+    
+    stringstream ss;
+    ss << "Total time for len " << len << ": " << compute_time << " secs";
+    cout << ss.str() << endl;
+    
     
     *totalPaths = totalPathsTmp;
 }
@@ -335,15 +343,15 @@ int main(int argc, char** argv) {
     
     // Free stuff. 
     // Free validWords
-    for (int i = 0; i < validWords.size(); i++) {
+    for (int i = 0; i < allValidWords.size(); i++) {
             allValidWords[i].deleteWord();
  
     }
     // And free the board
     //delete board;
     
-    clock_t program_end = clock() - program_start;
-    cout << "Time spent: " << ((float)program_end/CLOCKS_PER_SEC) << " secs" << endl;
+    clock_t program_end = clock();
+    cout << "Time spent: " << ((float)(program_end-program_start)/CLOCKS_PER_SEC) << " secs" << endl;
 
     return 0;
 }
