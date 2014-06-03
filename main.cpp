@@ -237,6 +237,7 @@ int main(int argc, char** argv) {
     int totalPaths = 0;
     for (int len = minPathLength; len <= maxPathLength; len++ ) {
         cout << "\tProcessing path length " << len << endl;
+        clock_t compute_start = clock();
         for (int r = 0; r < board.getRows(); r++) {
             for (int c = 0; c < board.getCols(); c++ ) {
                 Board cloneBoard = board;
@@ -265,6 +266,10 @@ int main(int argc, char** argv) {
                 }
             }
         }
+        
+        clock_t compute_end = clock();
+        float compute_time = (float)(compute_end-compute_start)/CLOCKS_PER_SEC;
+        cout << "Total time for len " << len << ": " << compute_time << " secs" << endl;
     }
 
     cout << "Sorting words" << endl;
