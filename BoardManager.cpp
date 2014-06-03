@@ -43,7 +43,7 @@ std::vector<Node*> BoardManager::getAvailableNeighbors(uint8_t row, uint8_t col,
     return v;
 }
 
-std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t col, int length, const Board &board)
+std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t col, int length, const Board &board) 
 {
     std::vector<std::vector<Node*> > paths;
     Node * currentNode = board.getNode(row, col);

@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cassert>
 #include <strings.h>
+#include <thread>
 
 #include "Node.h"
 #include "Board.h"
@@ -176,6 +177,53 @@ bool loadConfig(const string& configFile, uint8_t rowNum, uint8_t colNum,
     return true;
 }
 
+void doNothting()
+{
+    cout << "Thread here";
+}
+void computeValidWords( /* In */
+                        int len, const Board& board, BoardManager& bm, const unordered_map<string, int> &wordList,
+                        /* Out */
+                        int *totalPaths,
+                        vector<ProcessedWord> *validWords)
+{
+    set<string> alreadyDetectedWords;
+    // Only for stats
+    int totalPathsTmp = 0;
+
+    for (int r = 0; r < board.getRows(); r++) {
+        for (int c = 0; c < board.getCols(); c++ ) {
+            Board cloneBoard = board;
+            // All possible paths from pos (`r`, `c`) of length `len`
+            vector<vector<Node*> > paths = bm.getPathsFrom(r, c, len, cloneBoard);
+
+            totalPathsTmp += paths.size();
+
+            // Verify all the paths and keep only the valid words
+            for (int i = 0; i < paths.size(); i++) {
+                // Get current word
+                ProcessedWord processedWord(paths[i]);
+                string word = processedWord.comparableWord();
+
+                if (   wordList.find(word) != wordList.end() /* Valid ... */
+                    && alreadyDetectedWords.find (word) == alreadyDetectedWords.end()) /* ... but not already stored */
+                {
+                    alreadyDetectedWords.insert(word);
+                    validWords->push_back(processedWord);
+                } else {
+                    // This path is not a valid word. Free it from memory
+                    for (int j = 0; j < paths[i].size(); j++ ){
+                        delete paths[i][j];
+                    }
+                }
+            }
+        }
+    }
+
+    
+    *totalPaths = totalPathsTmp;
+}
+
 int main(int argc, char** argv) {
 
     /* Default CONFIG */
@@ -186,7 +234,7 @@ int main(int argc, char** argv) {
     vector<pair<uint8_t, uint8_t>> tripleLetter;
     vector<pair<uint8_t, uint8_t>> doubleWord;
     vector<pair<uint8_t, uint8_t>> tripleWord;
-    
+   
     const string wordListFile = "dict.txt";
     const string configFile = "config";
     
@@ -202,6 +250,10 @@ int main(int argc, char** argv) {
     }
     cout << "Min path: " << minPathLength << endl;
     cout << "Max path: " << maxPathLength << endl;
+
+    // Every length will be computed by a thread
+    const int numThreads = maxPathLength - minPathLength + 1;
+
     
     // Build board
     if (DEFAULT_BOARD_ROWS * DEFAULT_BOARD_COLS != letters.size()) {
@@ -225,65 +277,66 @@ int main(int argc, char** argv) {
     cout << "Loading word list" << endl;
     unordered_map<string, int> wordList = loadDictionary(wordListFile);
 
-    cout << "Creating possible paths and checking words:" << endl;
+    cout << "Creating possible paths and checking words with " << numThreads << " threads" << endl;
     
-    // Valid words already detected. Avoids printing duplicate words from different paths
-    set<string> alreadyDetectedWords;
-    // Valid words
-    vector<ProcessedWord> validWords;
-    // Only for stats
-    int totalPaths = 0;
-    for (int len = minPathLength; len <= maxPathLength; len++ ) {
-        cout << "\tProcessing path length " << len << endl;
-        for (int r = 0; r < board.getRows(); r++) {
-            for (int c = 0; c < board.getCols(); c++ ) {
-                Board cloneBoard = board;
-                // All possible paths from pos (`r`, `c`) of length `len`
-                vector<vector<Node*> > paths = bm.getPathsFrom(r, c, len, cloneBoard);
-                
-                totalPaths += paths.size();
-                
-                // Verify all the paths and keep only the valid words
-                for (int i = 0; i < paths.size(); i++) {
-                    // Get current word
-                    ProcessedWord processedWord(paths[i]);
-                    string word = processedWord.comparableWord();
-                    
-                    if (   wordList.find(word) != wordList.end() /* Valid ... */
-                        && alreadyDetectedWords.find (word) == alreadyDetectedWords.end()) /* ... but not already stored */
-                    {
-                        alreadyDetectedWords.insert(word);
-                        validWords.push_back(processedWord);
-                    } else {
-                        // This path is not a valid word. Free it from memory
-                        for (int j = 0; j < paths[i].size(); j++ ){
-                            delete paths[i][j];
-                        }
-                    }
-                }
-            }
-        }
+    vector<thread> workers;
+    vector<vector<ProcessedWord> > validWords;
+    vector<int> totalPathsCount;
+    
+    workers.resize(numThreads);
+    
+    validWords.resize(numThreads);
+    totalPathsCount.resize(numThreads);
+
+    int currentLen = minPathLength;
+    for (int i = 0 ; i < numThreads; i++) {
+        currentLen = minPathLength + i;
+        // Put thread to work
+        Board cloneBoard = board;
+        cout  << "\tProcessing path length " << currentLen << endl;
+        workers[i] = thread (computeValidWords, currentLen, board, bm, wordList, &totalPathsCount[i], &validWords[i]);
+        //workers[i]=  thread (doNothting);
+        cout << "Thread creation done " << currentLen << endl;
     }
 
+    cout << "Waiting for workers" << flush;
+    for (int i = 0 ; i < numThreads; i++) {
+        // Wait for every worker
+        currentLen = minPathLength + i;
+        workers[i].join();
+        cout << " " << currentLen << flush;
+    }
+    cout << " done!" << endl;
+    
+    int totalPaths = 0;
+    vector<ProcessedWord> allValidWords;
+    for (int i = 0; i < workers.size(); i++) {
+        // Sum up total Paths
+        totalPaths += totalPathsCount[i];
+        cout << "valid words " << i << ": " << validWords[i].size() << endl;
+        // Convert validWords to a single vector
+        allValidWords.insert(allValidWords.end(), validWords[i].begin(), validWords[i].end());
+    }
+    
     cout << "Sorting words" << endl;
-    sort (validWords.begin(), validWords.end(), ProcessedWord::wordCmp);        
+    sort (allValidWords.begin(), allValidWords.end(), ProcessedWord::wordCmp);  
 
-    assert( alreadyDetectedWords.size() == validWords.size());
+    cout << "Total paths: " << totalPaths << endl;
     cout << "\nWord list:" << endl;
-    for (int i = 0; i < validWords.size(); i++) {
-        cout << "(" << (1 + (int)validWords[i].coordOfNodeInPos(0).first);
-        cout << ", " << (1 + (int)validWords[i].coordOfNodeInPos(0).second) << ") ";
-        cout << validWords[i].prettyWord() << " : " << validWords[i].value() << endl;
+    for (int i = 0; i < allValidWords.size(); i++) {
+        cout << "(" << (1 + (int)allValidWords[i].coordOfNodeInPos(0).first); 
+        cout << ", " << (1 + (int)allValidWords[i].coordOfNodeInPos(0).second) << ") ";
+        cout << allValidWords[i].prettyWord() << " : " << allValidWords[i].value() << endl;
     }
 
     cout << "\nDone!" << endl;
     cout << "Total results: " << totalPaths << endl;
-    cout << "Total valid words: " << alreadyDetectedWords.size() << endl;
+    cout << "Total valid words: " << allValidWords.size() << endl;
     
     // Free stuff. 
     // Free validWords
     for (int i = 0; i < validWords.size(); i++) {
-            validWords[i].deleteWord();
+            allValidWords[i].deleteWord();
  
     }
     // And free the board
@@ -291,6 +344,7 @@ int main(int argc, char** argv) {
     
     clock_t program_end = clock() - program_start;
     cout << "Time spent: " << ((float)program_end/CLOCKS_PER_SEC) << " secs" << endl;
+
     return 0;
 }
 
