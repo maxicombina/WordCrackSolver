@@ -222,8 +222,10 @@ int main(int argc, char** argv) {
     cout << endl << board.toString() << endl;
 
     // Load dictionary
+    clock_t load_dict_start = clock();
     cout << "Loading word list" << endl;
     unordered_map<string, int> wordList = loadDictionary(wordListFile);
+    clock_t load_dict_end = clock();
 
     cout << "Creating possible paths and checking words:" << endl;
     
@@ -289,8 +291,9 @@ int main(int argc, char** argv) {
     // And free the board
     //delete board;
     
-    clock_t program_end = clock() - program_start;
-    cout << "Time spent: " << ((float)program_end/CLOCKS_PER_SEC) << " secs" << endl;
+    clock_t program_end = clock();
+    cout << "Time spent: " << (((float)program_end-program_start)/CLOCKS_PER_SEC) << " secs" << endl;
+    cout << "Time spent loading dict: " << (((float)load_dict_end-load_dict_start)/CLOCKS_PER_SEC) << " secs" << endl;
     return 0;
 }
 

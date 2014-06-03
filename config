@@ -1,7 +1,7 @@
 # Use q for qu and # for ñ
 letters  = rdeisbqloaolnmcm
 minLen   = 1
-maxLen   = 10
+maxLen   = 8
 dl       = 
 tl       = 21,44
 dw       = 
