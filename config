@@ -1,7 +1,7 @@
 # Use q for qu and # for ñ
 letters  = vleniscueaoaiori
-minLen   = 1
-maxLen   = 2
+minLen   = 11
+maxLen   = 11
 dl       = 
 tl       = 13,44
 dw       = 

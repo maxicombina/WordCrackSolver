@@ -246,7 +246,6 @@ int main(int argc, char** argv) {
         for (int i = 0; i < paths.size(); i++) {
             // Get current word
             ProcessedWord processedWord(paths[i]);
-            vector<Node*> w = paths[i];
             string word = processedWord.comparableWord();
 
             if (   alreadyDetectedWords.find (word) == alreadyDetectedWords.end() && /* If not already stored */

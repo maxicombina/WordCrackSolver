@@ -120,8 +120,6 @@ ProcessedWord::ProcessedWord(std::vector<Node*> path) {
     _value = wordValue + _lenExtraPoints[_comparable_word.length()];
 }
 
-//ProcessedWord::ProcessedWord(const ProcessedWord& orig) {
-//}
 
 ProcessedWord::~ProcessedWord() {
 }
