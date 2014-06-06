@@ -23,8 +23,7 @@ public:
     ~BoardManager();
 public:
     std::vector<Node* > getAvailableNeighbors(uint8_t row, uint8_t col, const Board &board);
-    std::vector<std::vector<Node*> > getPathsFrom(uint8_t row, uint8_t col, int length, const Board &board);
-    std::pair<std::string, int> wordFromPath(std::vector<Node* > path);
+    std::vector<std::vector<Node*> > getPathsFrom(int length, const Board& boad);
 };
 
 #endif	/* BOARDMANAGER_H */

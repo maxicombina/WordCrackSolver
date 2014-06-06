@@ -60,7 +60,7 @@
           </preprocessorList>
         </ccTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-st</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-ppl</output>
         </linkerTool>
       </compileType>
       <item path="Board.cpp" ex="false" tool="1" flavor2="0">
@@ -105,7 +105,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-st</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-ppl</output>
         </linkerTool>
       </compileType>
       <item path="Board.cpp" ex="false" tool="0" flavor2="0">

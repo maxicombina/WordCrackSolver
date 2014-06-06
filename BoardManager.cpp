@@ -10,6 +10,11 @@
 #include <sstream>
 #include <map>
 #include <utility>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+
+
 
 #include "BoardManager.h"
 #include "Node.h"
@@ -43,55 +48,48 @@ std::vector<Node*> BoardManager::getAvailableNeighbors(uint8_t row, uint8_t col,
     return v;
 }
 
-std::vector<std::vector<Node*> > BoardManager::getPathsFrom(uint8_t row, uint8_t col, int length, const Board &board)
+std::vector<std::vector<Node*> > BoardManager::getPathsFrom(int length, const Board& board)
 {
     std::vector<std::vector<Node*> > paths;
-    Node * currentNode = board.getNode(row, col);
-    currentNode->markVisited();
     
-    if (length == 1) {
-        std::vector<Node*> ngbs = this->getAvailableNeighbors(row, col, board);
-        for (int i = 0; i < ngbs.size(); i++) {
-            std::vector<Node*> path;
-            Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col(), currentNode->getMod());
-            path.push_back(currentNodeCopy);
-            Node* currentNgbCopy = new Node(ngbs[i]->letter(), ngbs[i]->row(), ngbs[i]->col(), ngbs[i]->getMod());
-            path.push_back(currentNgbCopy);
-            paths.push_back(path);
+    std::stringstream pathFile;
+    pathFile << "paths_";
+    if (length < 10) {
+        pathFile << "0";
+    }
+    pathFile << length;
+    
+    std::ifstream myFile (pathFile.str().c_str());
+    if (myFile.is_open()) {
+        std::string singlePath;
+       
+        while(getline(myFile, singlePath)) {
+            
+            std::istringstream is_singlePath (singlePath);
+            std::string singleNode;
+            
+            std::vector<Node*> singlePathNodes;
+            
+            while(getline(is_singlePath, singleNode, ',')) {
+                
+                uint8_t row = (uint8_t) singleNode.c_str()[0] - '0';
+                uint8_t col = (uint8_t) singleNode.c_str()[1] - '0';
+                
+                Node* node = new Node(board.getNode(row, col)->letter(), row, col, board.getNode(row, col)->getMod());
+                singlePathNodes.push_back(node);
+            }
+            
+            paths.push_back(singlePathNodes);
         }
         
     } else {
-        std::vector<Node*> ngbs = this->getAvailableNeighbors(row, col, board);
-        for (int i = 0; i < ngbs.size(); i++) {
-            Board cloneBoard = board;
-            std::vector<std::vector<Node*> > subPaths;
-            subPaths = this->getPathsFrom(ngbs[i]->row(), ngbs[i]->col(), length-1, cloneBoard);
-            for (int j = 0; j < subPaths.size(); j++) {
-                std::vector<Node *> currentPath = subPaths[j];
-                std::vector<Node*>::iterator it = currentPath.begin();
-                Node* currentNodeCopy = new Node(currentNode->letter(), currentNode->row(), currentNode->col(), currentNode->getMod());
-                currentPath.insert(it, currentNodeCopy);
-                paths.push_back(currentPath);
-            }
-        }
+        std::cerr << "Error opening file " << pathFile.str() << std::endl;
+        exit(EXIT_FAILURE);
     }
+
     return paths;
 }
 
-std::pair<std::string, int> BoardManager::wordFromPath(std::vector<Node* > path)
-{
-//    std::stringstream s("");
-//    int value = 0;
-//    for (int i = 0; i < path.size(); i++){
-//        value += _letterValues[path[i]->letter()];
-//        if (path[i]->letter() == 'q'){
-//            s << "qu";
-//        } else {
-//            s << path[i]->letter();
-//        }
-//    }
-//    return std::pair<std::string, int>(s.str(), value);
-}
 
 
  

@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-st
-OUTPUT_BASENAME=mezcladitoc-st
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mezcladitoc-ppl
+OUTPUT_BASENAME=mezcladitoc-ppl
 PACKAGE_TOP_DIR=mezcladitoc/
 
 # Functions
