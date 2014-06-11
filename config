@@ -1,8 +1,8 @@
 # Use q for qu and # for ñ
-letters  = rdeisbqloaolnmcm
+letters  = nduneuaeistaivae
 minLen   = 1
-maxLen   = 8
-dl       = 
-tl       = 21,44
+maxLen   = 10
+dl       = 33,34
+tl       = 
 dw       = 
-tw       = 41
+tw       = 44
