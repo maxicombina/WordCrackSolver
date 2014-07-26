@@ -4,11 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>Board.h</itemPath>
-      <itemPath>BoardManager.h</itemPath>
-      <itemPath>Node.h</itemPath>
-      <itemPath>ProcessedWord.h</itemPath>
-      <itemPath>debug.h</itemPath>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>src/Board.h</itemPath>
+        <itemPath>src/BoardManager.h</itemPath>
+        <itemPath>src/Node.h</itemPath>
+        <itemPath>src/ProcessedWord.h</itemPath>
+        <itemPath>src/debug.h</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -17,11 +19,13 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Board.cpp</itemPath>
-      <itemPath>BoardManager.cpp</itemPath>
-      <itemPath>Node.cpp</itemPath>
-      <itemPath>ProcessedWord.cpp</itemPath>
-      <itemPath>main.cpp</itemPath>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>src/Board.cpp</itemPath>
+        <itemPath>src/BoardManager.cpp</itemPath>
+        <itemPath>src/Node.cpp</itemPath>
+        <itemPath>src/ProcessedWord.cpp</itemPath>
+        <itemPath>src/main.cpp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -35,6 +39,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -61,27 +68,28 @@
         </ccTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/wordcracksolver-st</output>
+          <commandLine>-std=c++0x</commandLine>
         </linkerTool>
       </compileType>
-      <item path="Board.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Board.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Board.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Board.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="BoardManager.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/BoardManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="BoardManager.h" ex="false" tool="3" flavor2="0">
+      <item path="src/BoardManager.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Node.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Node.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Node.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Node.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="ProcessedWord.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/ProcessedWord.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="ProcessedWord.h" ex="false" tool="3" flavor2="0">
+      <item path="src/ProcessedWord.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="debug.h" ex="false" tool="3" flavor2="0">
+      <item path="src/debug.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -106,27 +114,28 @@
         </asmTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/wordcracksolver-st</output>
+          <commandLine>-std=c++0x</commandLine>
         </linkerTool>
       </compileType>
-      <item path="Board.cpp" ex="false" tool="0" flavor2="0">
+      <item path="src/Board.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Board.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Board.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="BoardManager.cpp" ex="false" tool="0" flavor2="0">
+      <item path="src/BoardManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="BoardManager.h" ex="false" tool="3" flavor2="0">
+      <item path="src/BoardManager.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Node.cpp" ex="false" tool="0" flavor2="0">
+      <item path="src/Node.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Node.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Node.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="ProcessedWord.cpp" ex="false" tool="0" flavor2="0">
+      <item path="src/ProcessedWord.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="ProcessedWord.h" ex="false" tool="3" flavor2="0">
+      <item path="src/ProcessedWord.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="debug.h" ex="false" tool="3" flavor2="0">
+      <item path="src/debug.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -35,11 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Board.o \
-	${OBJECTDIR}/BoardManager.o \
-	${OBJECTDIR}/Node.o \
-	${OBJECTDIR}/ProcessedWord.o \
-	${OBJECTDIR}/main.o
+	${OBJECTDIR}/src/Board.o \
+	${OBJECTDIR}/src/BoardManager.o \
+	${OBJECTDIR}/src/Node.o \
+	${OBJECTDIR}/src/ProcessedWord.o \
+	${OBJECTDIR}/src/main.o
 
 
 # C Compiler Flags
@@ -64,32 +64,32 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/wordcracksolver-st: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/wordcracksolver-st ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/wordcracksolver-st ${OBJECTFILES} ${LDLIBSOPTIONS} -std=c++0x
 
-${OBJECTDIR}/Board.o: Board.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Board.o: src/Board.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Board.o Board.cpp
+	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Board.o src/Board.cpp
 
-${OBJECTDIR}/BoardManager.o: BoardManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/BoardManager.o: src/BoardManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BoardManager.o BoardManager.cpp
+	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BoardManager.o src/BoardManager.cpp
 
-${OBJECTDIR}/Node.o: Node.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Node.o: src/Node.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Node.o Node.cpp
+	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Node.o src/Node.cpp
 
-${OBJECTDIR}/ProcessedWord.o: ProcessedWord.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/ProcessedWord.o: src/ProcessedWord.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ProcessedWord.o ProcessedWord.cpp
+	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ProcessedWord.o src/ProcessedWord.cpp
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/main.o: src/main.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -DDEBUG -I/usr/include/c++/4.6 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
 
 # Subprojects
 .build-subprojects:
