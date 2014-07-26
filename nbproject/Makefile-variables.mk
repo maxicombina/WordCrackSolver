@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=mezcladitoc-mt
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/mezcladitoc-mt
+CND_ARTIFACT_NAME_Debug=wordcracksolver-mt
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/wordcracksolver-mt
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=mezcladitoc.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/mezcladitoc.tar
+CND_PACKAGE_NAME_Debug=wordcracksolver.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/wordcracksolver.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=mezcladitoc-mt
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/mezcladitoc-mt
+CND_ARTIFACT_NAME_Release=wordcracksolver-mt
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/wordcracksolver-mt
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=mezcladitoc.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/mezcladitoc.tar
+CND_PACKAGE_NAME_Release=wordcracksolver.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/wordcracksolver.tar
 #
 # include compiler specific variables
 #
