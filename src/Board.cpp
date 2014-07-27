@@ -1,6 +1,6 @@
 /* 
  * File:   Board.cpp
- * Author: maxlo
+ * Author: Maxi Combina
  * 
  * Created on May 27, 2014, 7:56 PM
  */
@@ -45,7 +45,7 @@ Board::Board()
 }
 
 Board::Board(const Board& orig) {
-    DEBUG_MSG("Board CC");
+    DEBUG_MSG("Board Copy Constructor");
     _rows = orig._rows;
     _cols = orig._cols;
     

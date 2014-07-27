@@ -1,6 +1,6 @@
 /* 
  * File:   Node.h
- * Author: maxlo
+ * Author: Maxi Combina
  *
  * Created on May 27, 2014, 6:38 PM
  */

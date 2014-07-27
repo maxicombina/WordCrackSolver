@@ -9,6 +9,17 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/BoardManager.cpp</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/BoardManager.h</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/ProcessedWord.h</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/Node.cpp</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/Node.h</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/Board.cpp</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/main.cpp</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/debug.h</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/Board.h</file>
+            <file>file:/home/maxlo/src/WordCrackSolver/src/ProcessedWord.cpp</file>
+        </group>
     </open-files>
 </project-private>

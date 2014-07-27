@@ -1,6 +1,6 @@
 /* 
  * File:   ProcessedWord.cpp
- * Author: maxlo
+ * Author: Maxi Combina
  * 
  * Created on May 31, 2014, 12:03 AM
  */

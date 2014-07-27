@@ -1,6 +1,6 @@
 /* 
  * File:   BoardManager.h
- * Author: maxlo
+ * Author: Maxi Combina
  *
  * Created on May 28, 2014, 8:21 PM
  */

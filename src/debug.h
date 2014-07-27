@@ -1,6 +1,6 @@
 /* 
  * File:   debug.h
- * Author: maxlo
+ * Author: Maxi Combina
  *
  * Created on May 28, 2014, 7:49 PM
  */

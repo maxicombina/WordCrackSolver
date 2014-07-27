@@ -1,6 +1,6 @@
 /* 
  * File:   main.cpp
- * Author: maxlo
+ * Author: Maxi Combina
  *
  * Created on May 27, 2014, 6:34 PM
  */
