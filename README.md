@@ -38,7 +38,7 @@ You need to put a `dict.txt` and a `config` file alongside it.
 
    This means that `A` and `F` have the DoubleLetter modifier, and that `N` has the TripleWord modifier.
 
-## I hant to hack it, tell me more
+## I want to hack it, tell me more
 
  * The project can be opened with Netbeans.
   * There are 2 configs, as usual, `Debug` and `Release`.
