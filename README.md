@@ -15,10 +15,10 @@ Yes, you need to put a `dict.txt` and a `config` file alongside it.
    * `letters` = 16 letters, that compose the board: ABCDEFGHIJKLMNOP represent the board:
       
 ``` 
-| A | B | C | D |
-| E | F | G | H |
-| I | J | K | L |
-| M | N | O | P |
+        | A | B | C | D |
+        | E | F | G | H |
+        | I | J | K | L |
+        | M | N | O | P |
 ```
 
 ## I hant to hack it, tell me more
