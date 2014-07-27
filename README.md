@@ -40,6 +40,12 @@ You need to put a `dict.txt` and a `config` file alongside it.
 
 ## I hant to hack it, tell me more
 
+ * The project can be opened with Netbeans.
+  * There are 2 configs, as usual, `Debug` and `Release`.
+
+ * The `master` branch is a single-thread version, that computes all the possible paths every time. There are 2 other branches:
+  * `mt` with multi-threading (though I did not find it specially faster. I must be missing something) and 
+  * `path_preload`: all the possible paths are already pre-computed. This saves some time, but uses more memory.
 
 ## License
 [GPL v3](http://www.gnu.org/licenses/gpl-3.0.txt)
