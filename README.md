@@ -7,7 +7,7 @@ A tool to find valid words in a [WordCrack](http://www.wordcrack.com/) board.
 After cloning, just run `make CONF=Release`. You will find the executable under `dist/Release/<architecurte>/wordcracksolver-st`.
 
 ### But I run `./wordcracksolver-st` and it complains!
-Yes, you need to put a `dict.txt` and a `config` file alongside it.
+You need to put a `dict.txt` and a `config` file alongside it.
 
  * The `dict.txt` must contain a list of valid words. There is already a file for spanish words (which is not
    complete and contains some words not considered valid by WordCrack --mainly some forms of verb conjugation)
@@ -25,8 +25,8 @@ Yes, you need to put a `dict.txt` and a `config` file alongside it.
 ```
 
  * Use the letter `q` for representing `Qu` and `#` for `Ñ`
- * `minLen` and `maxLen`: the minimum and maximun *path* lenght to compute. A word with **N** letters has **N-1** path lenght. Thus, `minLen 1` means "words of 2 letters", and `maxLen 15` means "words of 16 letters". In practice, paths lengths greater than 11 or 12 do not find any extra word, and add a lot of time of computation. Recomened values are `minLen=4` and `maxLen=10`
- * `dl`, `tl`, `dw` and `tw`: DoubleLetter, TripleLetter, DoubleWord and TripleWord modififies. The upper left tile of the Board (`A` in the example above) has coordinates "00", `B` has "01", `C` has "02", ..., `E` has "10" and so on, up to `P` that has "33". For each modifier, enter the coordinates. Use "," to separate. Example:
+ * `minLen` and `maxLen`: the minimum and maximun *path* length to compute. A word with **N** letters has **N-1** path length. Thus, `minLen 1` means "words of 2 letters", and `maxLen 15` means "words of 16 letters". In practice, paths lengths greater than 11 or 12 do not find any extra word, and add a lot of time of computation. Recomended values are `minLen=4` and `maxLen=10`
+ * `dl`, `tl`, `dw` and `tw`: DoubleLetter, TripleLetter, DoubleWord and TripleWord modifiers. The upper left tile of the Board (`A` in the example above) has coordinates "00", `B` has "01", `C` has "02", ..., `E` has "10" and so on, up to `P` that has "33". Enter the coordinates for each modifier using "," to separate. Example:
      * dl = 00, 11
      * tl = 
      * dw =
