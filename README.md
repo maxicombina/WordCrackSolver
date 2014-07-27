@@ -14,7 +14,9 @@ Yes, you need to put a `dict.txt` and a `config` file alongside it.
  * The `config` file has the boards letters, and the special tiles (double letter, double word, triple letter, triple word). Detail of the `config` file:
    * `letters` = 16 letters, that compose the board: ABCDEFGHIJKLMNOP represent the board:
       
-        |ABCD|
+        |   |   |   |    |
+        | - |:-:|:-:| -:|
+        | A | B | C | D |
         |EFGH|
         |IJKL|
         |MNOP|
